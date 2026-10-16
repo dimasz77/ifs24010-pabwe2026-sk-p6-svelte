@@ -66,10 +66,6 @@
   --color-indigo-600: var(--color-pine-600);
 }
 
-@utility btn { /* NOSONAR */
-  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-60;
-}
-
 @layer base {
   body {
     font-family: var(--font-sans);
@@ -113,6 +109,12 @@
 }
 
 @layer components {
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
   .card {
     @apply rounded-xl border border-sage-200 bg-white;
   }
@@ -130,15 +132,15 @@
   }
 
   .btn-primary {
-    @apply btn border-2 border-marigold-500 bg-marigold-400 text-ink hover:bg-marigold-500;
+    @apply border-2 border-marigold-500 bg-marigold-400 text-ink hover:bg-marigold-500;
   }
 
   .btn-secondary {
-    @apply btn border-2 border-pine-800 bg-white text-pine-800 hover:bg-pine-50;
+    @apply border-2 border-pine-800 bg-white text-pine-800 hover:bg-pine-50;
   }
 
   .btn-danger {
-    @apply btn border-2 border-red-700 bg-white text-red-700 hover:bg-red-50;
+    @apply border-2 border-red-700 bg-white text-red-700 hover:bg-red-50;
   }
 
   .btn-icon {
