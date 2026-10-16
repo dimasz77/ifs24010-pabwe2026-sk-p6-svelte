@@ -3,10 +3,11 @@
   import { currentPath, navigate, resolveRoute } from "./router.js";
   import { authProfile, isPreload, loadProfile } from "./features/auth/states/authStore.js";
   import AuthLayout from "./features/auth/layouts/AuthLayout.svelte";
+  import LoginPage from "./features/auth/pages/LoginPage.svelte";
   import LinkTreeLayout from "./features/linktrees/layouts/LinkTreeLayout.svelte";
 
   const pageLoaders = {
-    login: () => import("./features/auth/pages/LoginPage.svelte"),
+    login: () => Promise.resolve({ default: LoginPage }),
     register: () => import("./features/auth/pages/RegisterPage.svelte"),
     home: () => import("./features/linktrees/pages/HomePage.svelte"),
     detail: () => import("./features/linktrees/pages/DetailPage.svelte"),
@@ -30,6 +31,10 @@
 </script>
 
 {#if $isPreload}
+  <main class="grid min-h-screen place-items-center">
+    <h1 class="font-display text-xl font-bold text-muted">Memuat...</h1>
+  </main>
+{:else if (route.layout === "auth" && $authProfile) || (route.layout === "app" && !$authProfile)}
   <main class="grid min-h-screen place-items-center">
     <h1 class="font-display text-xl font-bold text-muted">Memuat...</h1>
   </main>
