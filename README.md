@@ -37,7 +37,8 @@ Jangan gunakan `bun test`; gunakan `bun run test` atau `bun x vitest run`.
 
 ## Desain UI ("Spruce & Marigold")
 - Bingkai gelap (header + rel navigasi kiri) membungkus kanvas konten terang; di seluler navigasi menjadi tab bar bawah.
-- Font: Bricolage Grotesque (judul) dan Atkinson Hyperlegible (isi), dimuat non-blocking dari Google Fonts.
+- Font: Bricolage Grotesque (judul) dan Atkinson Hyperlegible (isi), disajikan dari `public/fonts`
+  dan font utama di-preload dari origin yang sama untuk menghindari rantai request Google Fonts.
 - Kelas `bg-indigo-600` pada menu aktif Sidebar dipertahankan karena dipakai `Sidebar.test.js`;
   token `--color-indigo-600` dialihkan ke warna brand di `src/index.css`.
 
