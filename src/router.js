@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-export const currentPath = writable(window.location.pathname);
+export const currentPath = writable(globalThis.location.pathname);
 
 const routes = [
   { pattern: /^\/auth\/login\/?$/, name: "login", layout: "auth", keys: [] },
@@ -31,13 +31,13 @@ export function resolveRoute(path) {
 
 export function navigate(path, replace = false) {
   if (replace) {
-    window.history.replaceState({}, "", path);
+    globalThis.history.replaceState({}, "", path);
   } else {
-    window.history.pushState({}, "", path);
+    globalThis.history.pushState({}, "", path);
   }
   currentPath.set(path);
 }
 
-window.addEventListener("popstate", () => {
-  currentPath.set(window.location.pathname);
+globalThis.addEventListener("popstate", () => {
+  currentPath.set(globalThis.location.pathname);
 });

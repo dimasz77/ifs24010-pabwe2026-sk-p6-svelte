@@ -66,7 +66,7 @@
   --color-indigo-600: var(--color-pine-600);
 }
 
-@utility btn {
+@utility btn { /* NOSONAR: valid Tailwind CSS v4 directive not recognized by Sonar CSS analyzer. */
   @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-60;
 }
 

@@ -34,15 +34,19 @@ describe("DetailPage", () => {
     expect(fetchLinkTree).toHaveBeenCalledWith("7");
   });
 
-  it("status memuat", () => {
+  it("status memuat", async () => {
     render();
     isDetailLoading.set(true);
-    return screen.findByRole("heading", { level: 1, name: "Memuat data..." });
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "Memuat data..." })
+    ).toBeInTheDocument();
   });
 
-  it("status tidak ditemukan", () => {
+  it("status tidak ditemukan", async () => {
     render();
-    return screen.findByRole("heading", { level: 1, name: "Link tree tidak ditemukan." });
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "Link tree tidak ditemukan." })
+    ).toBeInTheDocument();
   });
 
   it("pemilik melihat semua kontrol", async () => {
