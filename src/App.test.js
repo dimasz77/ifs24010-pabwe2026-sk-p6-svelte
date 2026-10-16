@@ -43,7 +43,11 @@ describe("App", () => {
     authProfile.set(null);
     isPreload.set(true);
   });
-  afterEach(() => vi.unstubAllGlobals());
+  afterEach(() => {
+    vi.doUnmock("./features/auth/pages/RegisterPage.svelte");
+    vi.doUnmock("./features/common/pages/NotFoundPage.svelte");
+    vi.unstubAllGlobals();
+  });
 
   it("saat memuat profil menampilkan main dengan heading level-1", () => {
     // Ada token tetapi respons profil belum datang, sehingga status "memuat" terlihat.
@@ -104,5 +108,25 @@ describe("App", () => {
     stubApi();
     open("/tidak-ada");
     expect(await screen.findByText("404")).toBeInTheDocument();
+  });
+
+  it("menampilkan fallback saat halaman daftar gagal dimuat", async () => {
+    vi.doMock("./features/auth/pages/RegisterPage.svelte", () => {
+      throw new Error("Gagal memuat chunk");
+    });
+    open("/auth/register");
+
+    expect(await screen.findByText("Halaman gagal dimuat.")).toBeInTheDocument();
+    expect(screen.getByRole("main").querySelector("p")).not.toBeEmptyDOMElement();
+  });
+
+  it("menampilkan fallback saat halaman 404 gagal dimuat", async () => {
+    vi.doMock("./features/common/pages/NotFoundPage.svelte", () => {
+      throw "Gagal memuat halaman";
+    });
+    open("/tidak-ada");
+
+    expect(await screen.findByText("Halaman gagal dimuat.")).toBeInTheDocument();
+    expect(screen.getByRole("main").querySelector("p")).not.toBeEmptyDOMElement();
   });
 });

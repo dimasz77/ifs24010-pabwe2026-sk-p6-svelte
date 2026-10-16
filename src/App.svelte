@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { currentPath, navigate, resolveRoute } from "./router.js";
   import { authProfile, isPreload, loadProfile } from "./features/auth/states/authStore.js";
+  import { getPageLoadErrorMessage } from "./helpers/pageLoadError.js";
   import AuthLayout from "./features/auth/layouts/AuthLayout.svelte";
   import LoginPage from "./features/auth/pages/LoginPage.svelte";
   import LinkTreeLayout from "./features/linktrees/layouts/LinkTreeLayout.svelte";
@@ -45,22 +46,22 @@
     </main>
   {:then pageModule}
     {@const Page = pageModule.default}
-    {#if route.layout === "auth" && !$authProfile}
-      <AuthLayout>
-        <Page />
-      </AuthLayout>
-    {:else if route.layout === "app" && $authProfile}
+    {#if route.layout === "app"}
       <LinkTreeLayout>
         <Page {...route.params} />
       </LinkTreeLayout>
-    {:else if route.layout === "plain"}
+    {:else if route.layout === "auth"}
+      <AuthLayout>
+        <Page />
+      </AuthLayout>
+    {:else}
       <Page />
     {/if}
   {:catch error}
     <main class="grid min-h-screen place-items-center">
       <div class="text-center">
         <h1 class="font-display text-xl font-bold text-muted">Halaman gagal dimuat.</h1>
-        <p class="mt-2 text-sm text-muted">{error instanceof Error ? error.message : String(error)}</p>
+        <p class="mt-2 text-sm text-muted">{getPageLoadErrorMessage(error)}</p>
       </div>
     </main>
   {/await}
