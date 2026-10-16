@@ -48,3 +48,10 @@ Jangan gunakan `bun test`; gunakan `bun run test` atau `bun x vitest run`.
   (Settings → Environment Variables): `VITE_DELCOM_BASEURL=https://open-api.delcom.org/api/v1`,
   lalu redeploy. Tanpa ini aplikasi memakai `http://localhost:8000/api/v1`.
 - Build command: `bun run build`, output directory: `dist`.
+
+## Deploy ke Netlify
+- Di produksi aplikasi memanggil API lewat proxy same-origin `/delcom-api/...`. Di Vercel proxy ini diatur
+  `vercel.json`; di Netlify diatur `public/_redirects` (ikut ter-copy ke `dist/`). Tanpa file ini,
+  login/daftar gagal dengan 404 dan pesan "Gagal terhubung ke server".
+- Build command: `bun run build` (atau `npm run build`), publish directory: `dist`.
+- Variabel `VITE_DELCOM_BASEURL` hanya dipakai untuk URL gambar (aset) dan saat `bun run dev`.
