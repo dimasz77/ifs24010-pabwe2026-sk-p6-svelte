@@ -4,6 +4,32 @@ import { svelteTesting } from "@testing-library/svelte/vite";
 import tailwindcss from "@tailwindcss/vite";
 import process from "process";
 
+function inlineBuildStyles() {
+  return {
+    name: "inline-build-styles",
+    apply: "build",
+    transformIndexHtml: {
+      order: "post",
+      handler(html, { bundle }) {
+        if (!bundle) return html;
+
+        return html.replace(/<link\b[^>]*rel="stylesheet"[^>]*>/g, (linkTag) => {
+          const href = linkTag.match(/\bhref="\/?([^"]+\.css)"/)?.[1];
+          const stylesheet = href ? bundle[href] : null;
+          if (!stylesheet || stylesheet.type !== "asset") return linkTag;
+
+          const css =
+            typeof stylesheet.source === "string"
+              ? stylesheet.source
+              : new TextDecoder().decode(stylesheet.source);
+          delete bundle[href];
+          return `<style>${css}</style>`;
+        });
+      },
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const baseUrl = env.VITE_DELCOM_BASEURL || "https://open-api.delcom.org/api/v1";
@@ -15,6 +41,7 @@ export default defineConfig(({ mode }) => {
       }),
       tailwindcss(),
       svelteTesting(),
+      inlineBuildStyles(),
     ],
     server: {
       port: Number(env.APP_PORT) || 3004,
